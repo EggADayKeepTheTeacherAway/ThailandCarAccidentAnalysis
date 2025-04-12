@@ -12,7 +12,7 @@ Secondary data are from both Kaggle and the weather API.
 
  - **Weather Data**: Real-time data from [OpenWeather API](https://www.weatherapi.com/weather/q/bangkok-2366981?utm_source=chatgpt.com) for fog, rain, or other weather conditions that affect driving safety.
  - **Historical Accident Data**:  [Thailand Road Accident 2019-2022](https://www.kaggle.com/datasets/thaweewatboy/thailand-road-accident-2019-2022?utm_source=chatgpt.com) The dataset from Kaggle provides past road accident data in Thai used to train the prediction model for risk analysis and to improve the accuracy of predictions.
-- **[TRAMS](https://trams.mot.go.th/dashboard_report)** (TRansport Accident Management System): The ministry of transport dashboards.
+ - **[TRAMS](https://trams.mot.go.th/dashboard_report)** (TRansport Accident Management System): The ministry of transport dashboards.
 
 ## **API to be provided to users**
  - Website to input the location and time to predict the accident and show the historical data from the database that can be sorted by location
