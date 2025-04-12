@@ -36,10 +36,10 @@ Secondary data are from both Kaggle and the weather API.
             source myvenv/bin/activate
             ```
  2. Install the requirements
-    ```shell
-    pip install -r requirements.txt
-    ```
+   ```shell
+   pip install -r requirements.txt
+   ```
  3. Run the app
-    ```shell
-    streamlit 
-    ```
+   ```shell
+   streamlit 
+   ```
