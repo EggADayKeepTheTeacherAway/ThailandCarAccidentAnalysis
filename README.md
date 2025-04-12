@@ -41,5 +41,5 @@ Secondary data are from both Kaggle and the weather API.
    ```
  3. Run the app
    ```shell
-   streamlit 
+   streamlit run src/app.py
    ```
