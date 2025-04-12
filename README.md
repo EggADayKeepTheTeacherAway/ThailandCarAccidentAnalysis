@@ -15,9 +15,7 @@ Secondary data are from both Kaggle and the weather API.
 - **[TRAMS](https://trams.mot.go.th/dashboard_report)** (TRansport Accident Management System): The ministry of transport dashboards.
 
 ## **API to be provided to users**
- - Quickly alert user while the microcontroller is on, such as "Low light detected"
- - Prediction using the value from the microcontroller with the historical data
- - Website to input the location and time to predict the accident.
+ - Website to input the location and time to predict the accident and show the historical data from the database that can be sorted by location
 
 ## Install requirements and run the app.
  1. Create virtual environment
