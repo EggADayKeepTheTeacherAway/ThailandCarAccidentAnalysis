@@ -18,3 +18,30 @@ Secondary data are from both Kaggle and the weather API.
  - Quickly alert user while the microcontroller is on, such as "Low light detected"
  - Prediction using the value from the microcontroller with the historical data
  - Website to input the location and time to predict the accident.
+
+## Install requirements and run the app.
+ 1. Create virtual environment
+    1. Create venv
+        ```shell
+        python -m venv venv
+        ```
+    2. Activate venv
+       1. For Windows
+            ```shell
+            # In cmd.exe
+            venv\Scripts\activate.bat
+            # In PowerShell
+            venv\Scripts\Activate.ps1
+            ```
+       3. For MacOS and Linux
+            ```shell
+            source myvenv/bin/activate
+            ```
+ 2. Install the requirements
+    ```shell
+    pip install -r requirements.txt
+    ```
+ 3. Run the app
+    ```shell
+    streamlit 
+    ```
