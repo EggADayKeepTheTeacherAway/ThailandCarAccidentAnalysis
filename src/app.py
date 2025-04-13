@@ -1,24 +1,35 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+import os
 
+# constants
+DATA_FOLDER = "data"
+CSV_FILE = [file for file in os.listdir(DATA_FOLDER) if file.endswith(".csv")]
+YEAR = list(x for x in range(2012, 2025))
+
+# page
 st.title("Thailand Car Accident Analysis")
 
-with st.sidebar:
-    st.header("Home")
-    st.write("This is my first app")
+year = st.selectbox("Select year", YEAR)
 
-st.header("Header with divider", divider="rainbow")
+st.header(f"Accident data year: :red[{year}]", divider="rainbow")
 
-st.markdown("This is a streamlit markdown cell.")
+for file in CSV_FILE:
+    if str(year) in file:
+        filepath = os.path.join(DATA_FOLDER, file)
+        try:
+            df = pd.read_csv(filepath)
+            df = df.fillna("")
+            st.dataframe(df)
+        except Exception as e:
+            st.error(f"Error reading file: {e}")
 
-st.subheader("st.columns")
-col1, col2 = st.columns(2)
-with col1:
-    x = st.slider("Select a number", 0, 100, 50)
-with col2:
-    st.write("Value of :rainbow[**x**] is:", x)
-
-st.subheader("st.area_chart")
-chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
-st.area_chart(chart_data)
+if df is not None:
+    st.markdown(
+        f'''
+        ## Summary
+        - Total accidents: {len(df)}
+        - Total fatalities: {df['จำนวนผู้เสียชีวิต'].sum()}
+        - Total injuries: {df['รวมจำนวนผู้บาดเจ็บ'].sum()}
+        '''
+    )
