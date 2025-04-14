@@ -61,13 +61,20 @@ with map_tab:
         if view_mode == MAP_OPTION[0]:
             st.map(copy_df[["lat", "lon"]], zoom=6, use_container_width=True)
         else:
+            ele_scale_col, pitch_col = st.columns(2)
+            with ele_scale_col:
+                ele_scale = st.slider(
+                    "Elevation scale", min_value=1, max_value=10000, value=1000
+                )
+            with pitch_col:
+                pitch = st.slider("Angle", min_value=0, max_value=60, value=50, step=1)
             layer = [
                 pdk.Layer(
                     "ColumnLayer",
                     data=copy_df,
                     get_position=["lon", "lat"],
                     get_elevation="รวมจำนวนผู้บาดเจ็บ",
-                    elevation_scale=1000,
+                    elevation_scale=ele_scale,
                     radius=1000,
                     get_fill_color=[255, 0, 0, 200],
                     pickable=True,
@@ -79,7 +86,7 @@ with map_tab:
                 latitude=copy_df["lat"].mean(),
                 longitude=copy_df["lon"].mean(),
                 zoom=6,
-                pitch=50,
+                pitch=pitch,
             )
 
             st.pydeck_chart(
