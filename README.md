@@ -36,10 +36,19 @@ Secondary data are from both Kaggle and the weather API.
             source myvenv/bin/activate
             ```
  2. Install the requirements
-   ```shell
-   pip install -r requirements.txt
-   ```
+    ```shell
+    pip install -r requirements.txt
+    ```
+    Install playwright required browser
+    ```shell
+    playwright install
+    ```
  3. Run the app
-   ```shell
-   streamlit 
-   ```
+     1. Run Main webpage
+          ```shell
+          streamlit run src/app.py
+          ```
+     2. Run FastAPI
+          ```shell
+          uvicorn src.api.api_main:app --reload   
+          ```
