@@ -63,8 +63,8 @@ class AccidentAPI:
                         df = pd.read_csv(filepath)
                         first_rc = df.head(1)
                         last_rc = df.tail(1)
+                        print(f"File name: {filename}")
                         return {
-                            "filename": filename,
                             "year": year,
                             "total_accidents": int(df.shape[0]),
                             "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
