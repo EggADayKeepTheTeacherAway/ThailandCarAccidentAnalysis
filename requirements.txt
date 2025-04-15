@@ -2,10 +2,8 @@ streamlit
 gdown
 pandas
 numpy
-matplotlib
-seaborn
-scikit-learn
 fastapi
 watchdog
 uvicorn
 pytest-playwright
+plotly
