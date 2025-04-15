@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
+import plotly.express as px
 import os
 
 st.set_page_config(page_title="Main Dashboard", layout="wide")
@@ -45,8 +46,56 @@ with data_tab:
         st.dataframe(df)
 
 with graph_tab:
-    # TODO: create a graph displaying the accident statistical data
-    pass
+    if df is not None:
+        line_col, bar_col = st.columns(2)
+        
+        # line graph
+        with line_col:
+            st.markdown(
+                f"""
+                ### Line graph of injuries per month in 
+                year {selected_year}
+                """
+            )
+            month_df = df.copy()
+            month_df["MONTH"] = pd.DataFrame(
+                month_df["วันที่เกิดเหตุ"].str.split("/").str[1]
+            )
+            st.line_chart(
+                month_df.groupby("MONTH")["รวมจำนวนผู้บาดเจ็บ"]
+                .sum()
+                .sort_index(ascending=True)
+            )
+        # bar graph
+        with bar_col:
+            bar_graph = st.selectbox(
+                "Select Bar x-axis", ["จังหวัด", "มูลเหตุสันนิษฐาน", "บริเวณที่เกิดเหตุ/ลักษณะทาง"]
+            )
+            try:
+                st.markdown(
+                    f"""
+                    ### Bar graph of injuries per 
+                    #### {bar_graph}
+                    """
+                )
+                graph_df = df[df[bar_graph] != "-"]
+                st.bar_chart(
+                    graph_df[["รวมจำนวนผู้บาดเจ็บ", bar_graph]].groupby(bar_graph).sum()
+                )
+            except Exception as e:
+                st.error(f"Error displaying bar graph: {e}")
+
+        # pie chart
+        weather_count = df["สภาพอากาศ"].value_counts().reset_index()
+        weather_count.columns = ["Weather", "Count"]
+        
+        st.markdown(
+            """
+            ### Pie chart of accidents by weather condition
+            """
+        )
+        fig = px.pie(weather_count, names="Weather", values="Count")
+        st.plotly_chart(fig)
 
 with map_tab:
     if df is not None:
