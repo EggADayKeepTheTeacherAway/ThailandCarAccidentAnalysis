@@ -39,6 +39,10 @@ Secondary data are from both Kaggle and the weather API.
     ```shell
     pip install -r requirements.txt
     ```
+    Install playwright required browser
+    ```shell
+    playwright install
+    ```
  3. Run the app
      1. Run Main webpage
           ```shell

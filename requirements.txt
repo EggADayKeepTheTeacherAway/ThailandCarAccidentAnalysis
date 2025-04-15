@@ -8,3 +8,4 @@ scikit-learn
 fastapi
 watchdog
 uvicorn
+pytest-playwright
