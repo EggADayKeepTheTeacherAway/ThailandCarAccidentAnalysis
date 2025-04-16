@@ -1,11 +1,13 @@
 import time
 from playwright.sync_api import sync_playwright, expect
 
+HEADLESS = True
+
 
 def test_dashboard_data_tab():
     """Test the dashboard data tab."""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=HEADLESS)
         page = browser.new_page()
         page.goto("http://localhost:8501")
 
@@ -26,9 +28,7 @@ def test_dashboard_data_tab():
         print("2012 Data frame year 2013 is not visible")
 
         # Click the selectbox to change the year
-        page.locator(
-            "#root > div:nth-child(1) > div.withScreencast > div > div > section.stMain.st-emotion-cache-bm2z3a.eht7o1d1 > div.stMainBlockContainer.block-container.st-emotion-cache-t1wise.eht7o1d4 > div > div > div > div:nth-child(2) > div > div"
-        ).click()
+        page.get_by_label("Select year").click()
         print("Clicked on the selectbox")
         time.sleep(1)
 
@@ -51,7 +51,7 @@ def test_dashboard_data_tab():
 def test_dashboard_graph_tab():
     """Test the dashboard graph tab."""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=HEADLESS)
         page = browser.new_page()
         page.goto("http://localhost:8501")
 
@@ -96,7 +96,7 @@ def test_dashboard_graph_tab():
 def test_dashboard_map_tab():
     """Test the dashboard map tab."""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=HEADLESS)
         page = browser.new_page()
         page.goto("http://localhost:8501")
 
@@ -132,5 +132,48 @@ def test_dashboard_map_tab():
         browser.close()
 
 
+def test_dashboard_summary_tab():
+    """Test the dashboard summary tab."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=HEADLESS)
+        page = browser.new_page()
+        page.goto("http://localhost:8501")
+
+        # Click sidebar link to 'dashboard'
+        page.get_by_role("link", name="dashboard").click()
+        time.sleep(2)
+
+        # Click the "Summary 📚" tab
+        page.locator("#tabs-bui2-tab-3").click()
+        time.sleep(2)
+
+        selectbox = page.get_by_label("Select year")
+        expect(selectbox).to_be_visible()
+        print("Select box is visible")
+
+        for year in range(2012, 2025):
+            selectbox.click()
+            selectbox.fill(str(year))
+            selectbox.press("Enter")
+            page.wait_for_timeout(250)
+
+            un_list = page.locator(
+                "#tabs-bui2-tabpanel-3 > div > div > div > div > div > div > ul"
+            )
+            expect(un_list).to_be_visible()
+            expect(un_list).to_have_count(1)
+            print("Summary data is visible")
+
+            list_items = un_list.locator("li")
+            expect(list_items).to_have_count(3)
+
+            page.screenshot(
+                path=f"tests/e2e/screenshots/dashboard/summary/summary_{year}.png"
+            )
+
+        page.close()
+        browser.close()
+
+
 if __name__ == "__main__":
-    test_dashboard_map_tab()
+    test_dashboard_summary_tab()

@@ -1,11 +1,13 @@
 import time
 from playwright.sync_api import sync_playwright, expect
 
+HEADLESS = True
+
 
 def test_home_page():
     """Test the home page."""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=HEADLESS)
         page = browser.new_page()
         page.goto("http://localhost:8501")
 
