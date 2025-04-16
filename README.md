@@ -52,3 +52,8 @@ Secondary data are from both Kaggle and the weather API.
           ```shell
           uvicorn src.api.api_main:app --reload   
           ```
+
+## Run the test
+  ```shell
+  pytest .\tests\
+  ```

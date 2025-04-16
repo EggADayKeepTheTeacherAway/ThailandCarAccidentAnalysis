@@ -7,3 +7,5 @@ watchdog
 uvicorn
 pytest-playwright
 plotly
+pytest
+httpx

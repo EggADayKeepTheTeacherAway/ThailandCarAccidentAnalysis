@@ -70,18 +70,20 @@ class AccidentAPI:
                         first_rc = df.head(1)
                         last_rc = df.tail(1)
                         print(f"File name: {filename}")
-                        return {
-                            "year": year,
-                            "total_accidents": int(df.shape[0]),
-                            "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
-                            "total_injuries": int(df["รวมจำนวนผู้บาดเจ็บ"].sum()),
-                            "first_record": self.format_record(first_rc),
-                            "last_record": self.format_record(last_rc),
-                        }
+                        return [
+                            {
+                                "year": year,
+                                "total_accidents": int(df.shape[0]),
+                                "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
+                                "total_injuries": int(df["รวมจำนวนผู้บาดเจ็บ"].sum()),
+                                "first_record": self.format_record(first_rc),
+                                "last_record": self.format_record(last_rc),
+                            }
+                        ]
                     except Exception as e:
                         raise HTTPException(
                             status_code=500, detail=f"Error reading file: {e}"
                         )
             return HTTPException(
-                status_code=404, detail="File not found for year {year}"
+                status_code=404, detail=f"File not found for year {year}"
             )
