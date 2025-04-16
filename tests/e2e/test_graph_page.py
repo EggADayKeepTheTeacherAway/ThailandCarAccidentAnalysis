@@ -93,5 +93,44 @@ def test_dashboard_graph_tab():
         browser.close()
 
 
+def test_dashboard_map_tab():
+    """Test the dashboard map tab."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+        page.goto("http://localhost:8501")
+
+        # Click sidebar link to 'dashboard'
+        page.get_by_role("link", name="dashboard").click()
+        time.sleep(2)
+
+        # Click the "Map 🗺️" tab
+        page.locator("#tabs-bui2-tab-2").click()
+        time.sleep(2)
+
+        # Check Map
+        map_2D = page.locator(
+            "#view-default-view > div:nth-child(1) > div.mapboxgl-map"
+        )
+        expect(map_2D).to_be_visible()
+        print("Map is visible")
+
+        radio = page.get_by_label("Select map view:")
+        expect(radio).to_be_visible()
+        print("Radio button is visible total count:", radio.count())
+        for option in ["2D (Simple Map)", "3D (Pydeck)"]:
+            radio.locator("text=" + option).click()
+            page.wait_for_timeout(750)
+            map_23D = page.locator(
+                "#view-default-view > div:nth-child(1) > div.mapboxgl-map"
+            )
+            expect(map_23D).to_be_visible()
+            print(f"Map is visible for {option}")
+            map_23D.screenshot(path=f"tests/e2e/screenshots/dashboard/map_{option}.png")
+
+        page.close()
+        browser.close()
+
+
 if __name__ == "__main__":
-    test_dashboard_graph_tab()
+    test_dashboard_map_tab()
