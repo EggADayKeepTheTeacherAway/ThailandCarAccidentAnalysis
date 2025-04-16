@@ -13,7 +13,7 @@ YEAR = list(x for x in range(2012, 2025))
 MAP_OPTION = ["2D (Simple Map)", "3D (Pydeck)"]
 
 # page
-st.title("Thailand Car Accident Analysis")
+st.title("Welcome to Dashboard Page🚗")
 
 selected_year = st.selectbox("Select year", YEAR)
 
@@ -48,7 +48,7 @@ with data_tab:
 with graph_tab:
     if df is not None:
         line_col, bar_col = st.columns(2)
-        
+
         # line graph
         with line_col:
             st.markdown(
@@ -88,7 +88,7 @@ with graph_tab:
         # pie chart
         weather_count = df["สภาพอากาศ"].value_counts().reset_index()
         weather_count.columns = ["Weather", "Count"]
-        
+
         st.markdown(
             """
             ### Pie chart of accidents by weather condition
