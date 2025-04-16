@@ -24,6 +24,7 @@ def test_home_page():
         expect(page.locator("h1")).to_have_text(
             "Welcome to Thailand Accident Analysis Web Page🚗"
         )
+        page.screenshot(path="tests/e2e/screenshots/home_page.png")
 
         anchors = page.locator("a")
         count = anchors.count()
@@ -35,17 +36,17 @@ def test_home_page():
         page.locator("text=api").click()
         time.sleep(2)
         expect(page.locator("h1")).to_have_text("Welcome to API Page🚗")
-        page.screenshot(path="./screenshots/home_page.png")
+        page.screenshot(path="tests/e2e/screenshots/api_page.png")
 
         page.locator("text=dashboard").click()
         time.sleep(2)
         expect(page.locator("h1")).to_have_text("Welcome to Dashboard Page🚗")
-        page.screenshot(path="./screenshots/home_page.png")
+        page.screenshot(path="tests/e2e/screenshots/dashboard_page.png")
 
         page.locator("text=data analytic").click()
         time.sleep(2)
         expect(page.locator("h1")).to_have_text("Welcome to Data Analytic Page🚗")
-        page.screenshot(path="./screenshots/home_page.png")
+        page.screenshot(path="tests/e2e/screenshots/data_analytic_page.png")
 
         time.sleep(2)
         page.close()
