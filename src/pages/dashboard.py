@@ -31,6 +31,7 @@ def get_df(year: int = 2012):
             filepath = os.path.join(DATA_FOLDER, file)
             try:
                 df = pd.read_csv(filepath)
+                df.drop(columns=["วันที่รายงาน"], inplace=True, errors="ignore")
                 numeric_col = df.select_dtypes(include=["number"]).columns
                 df[numeric_col] = df[numeric_col].fillna(-1)
                 df = df.fillna("-")

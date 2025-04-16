@@ -1,16 +1,5 @@
 import time
-import pytest
-import subprocess
 from playwright.sync_api import sync_playwright, expect
-
-
-@pytest.fixture(scope="session", autouse=True)
-def setup_streamlit():
-    """Launch the Streamlit app."""
-    process = subprocess.Popen(["streamlit", "run", "src/home.py"])
-    time.sleep(3)
-    yield
-    return process
 
 
 def test_home_page():
