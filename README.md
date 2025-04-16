@@ -20,9 +20,9 @@ Secondary data are from both Kaggle and the weather API.
 ## Install requirements and run the app.
  1. Create virtual environment
     1. Create venv
-        ```shell
-        python -m venv venv
-        ```
+          ```shell
+          python -m venv venv
+          ```
     2. Activate venv
        1. For Windows
             ```shell
@@ -36,17 +36,17 @@ Secondary data are from both Kaggle and the weather API.
             source myvenv/bin/activate
             ```
  2. Install the requirements
-    ```shell
-    pip install -r requirements.txt
-    ```
-    Install playwright required browser
-    ```shell
-    playwright install
-    ```
+     ```shell
+     pip install -r requirements.txt
+     ```
+     Install playwright required browser
+     ```shell
+     playwright install
+     ```
  3. Run the app
      1. Run Main webpage
           ```shell
-          streamlit run src/app.py
+          streamlit run src/home.py
           ```
      2. Run FastAPI
           ```shell
@@ -54,6 +54,6 @@ Secondary data are from both Kaggle and the weather API.
           ```
 
 ## Run the test
-  ```shell
-  pytest .\tests\
-  ```
+     ```shell
+     pytest .\tests\
+     ```

@@ -1,7 +1,7 @@
 # src/api/api_app.py
 import os
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 
 DATASET_NEED = [
     "ปีที่เกิดเหตุ",
@@ -70,16 +70,14 @@ class AccidentAPI:
                         first_rc = df.head(1)
                         last_rc = df.tail(1)
                         print(f"File name: {filename}")
-                        return [
-                            {
-                                "year": year,
-                                "total_accidents": int(df.shape[0]),
-                                "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
-                                "total_injuries": int(df["รวมจำนวนผู้บาดเจ็บ"].sum()),
-                                "first_record": self.format_record(first_rc),
-                                "last_record": self.format_record(last_rc),
-                            }
-                        ]
+                        return {
+                            "year": year,
+                            "total_accidents": int(df.shape[0]),
+                            "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
+                            "total_injuries": int(df["รวมจำนวนผู้บาดเจ็บ"].sum()),
+                            "first_record": self.format_record(first_rc),
+                            "last_record": self.format_record(last_rc),
+                        }
                     except Exception as e:
                         raise HTTPException(
                             status_code=500, detail=f"Error reading file: {e}"
@@ -87,3 +85,27 @@ class AccidentAPI:
             return HTTPException(
                 status_code=404, detail=f"File not found for year {year}"
             )
+
+        @self.app.get("/predict/accident")
+        async def get_accidents_year_summary(
+            lat: float = Query(...), lon: float = Query(...)
+        ):
+            prediction = "accident prediction"
+            # TODO: insert model here
+            return {
+                "lat": lat,
+                "lon": lon,
+                "prediction": prediction,
+            }
+
+        @self.app.get("/predict/injuries")
+        async def get_accidents_year_summary(
+            lat: float = Query(...), lon: float = Query(...)
+        ):
+            prediction = "injuries prediction"
+            # TODO: insert model here
+            return {
+                "lat": lat,
+                "lon": lon,
+                "prediction": prediction,
+            }
