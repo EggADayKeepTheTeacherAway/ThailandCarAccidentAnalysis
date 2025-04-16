@@ -17,6 +17,12 @@ DATASET_NEED = [
 ]
 
 
+def create_app():
+    app = FastAPI()
+    AccidentAPI(app)
+    return app
+
+
 class AccidentAPI:
     def __init__(self, app: FastAPI):
         self.app = app
