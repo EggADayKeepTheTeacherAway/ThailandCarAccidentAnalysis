@@ -1,7 +1,7 @@
 import time
 from playwright.sync_api import sync_playwright, expect
 
-HEADLESS = True
+HEADLESS = False
 
 
 def test_dashboard_data_tab():
@@ -16,7 +16,10 @@ def test_dashboard_data_tab():
         time.sleep(2)
 
         # Click the "Data 📈" tab
-        page.locator("#tabs-bui2-tab-0").click()
+        try:
+            page.locator("#tabs-bui2-tab-0").click()
+        except Exception as e:
+            page.get_by_label("Data 📈").click()
         time.sleep(2)
 
         expect(page.locator(".stDataFrame")).to_be_visible()
@@ -60,7 +63,11 @@ def test_dashboard_graph_tab():
         time.sleep(2)
 
         # Click the "Graph 📊" tab
-        page.locator("#tabs-bui2-tab-1").click()
+        try:
+            page.locator("#tabs-bui2-tab-1").click()
+        except Exception as e:
+            page.get_by_label("Graph 📊").click()
+
         time.sleep(2)
 
         # Check Line chart
@@ -83,9 +90,9 @@ def test_dashboard_graph_tab():
 
             canvas_count = page.locator("canvas")
             expect(canvas_count).to_have_count(total_canvas.count())
-            print(f"Bar chart is visible for {option.replace("/", "_")}")
+            print(f"Bar chart is visible for {option.replace('/', '_')}")
             page.locator("canvas").nth(1).screenshot(
-                path=f"tests/e2e/screenshots/dashboard/bar_chart_{option.replace("/", "_")}.png"
+                path=f"tests/e2e/screenshots/dashboard/bar_chart_{option.replace('/', '_')}.png"
             )
             time.sleep(1)
 
@@ -105,7 +112,10 @@ def test_dashboard_map_tab():
         time.sleep(2)
 
         # Click the "Map 🗺️" tab
-        page.locator("#tabs-bui2-tab-2").click()
+        try:
+            page.locator("#tabs-bui2-tab-2").click()
+        except Exception as e:
+            page.get_by_label("Map 🗺️").click()
         time.sleep(2)
 
         # Check Map
@@ -144,8 +154,10 @@ def test_dashboard_summary_tab():
         time.sleep(2)
 
         # Click the "Summary 📚" tab
-        page.locator("#tabs-bui2-tab-3").click()
-        time.sleep(2)
+        for i in range(3):
+            page.locator("#tabs-bui2-tab-3").click()
+            time.sleep(1)
+            print("Clicked!")
 
         selectbox = page.get_by_label("Select year")
         expect(selectbox).to_be_visible()
