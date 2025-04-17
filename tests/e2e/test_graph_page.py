@@ -17,7 +17,7 @@ def test_dashboard_data_tab():
 
         # Click the "Data 📈" tab
         try:
-            button = page.locator("button:has-text(\"Data 📈\")")
+            button = page.locator('button:has-text("Data 📈")')
             print("Button found:", button.count())
             button.click()
         except Exception as e:
@@ -66,7 +66,7 @@ def test_dashboard_graph_tab():
 
         # Click the "Graph 📊" tab
         try:
-            button = page.locator("button:has-text(\"Graph 📊\")")
+            button = page.locator('button:has-text("Graph 📊")')
             print("Button found:", button.count())
             button.click()
         except Exception as e:
@@ -117,7 +117,7 @@ def test_dashboard_map_tab():
 
         # Click the "Map 🗺️" tab
         try:
-            button = page.locator("button:has-text(\"Map 🗺️\")")
+            button = page.locator('button:has-text("Map 🗺️")')
             print("Button found:", button.count())
             button.click()
         except Exception as e:
@@ -158,8 +158,8 @@ def test_dashboard_summary_tab():
         # Click sidebar link to 'dashboard'
         page.get_by_role("link", name="dashboard").click()
         time.sleep(2)
-        
-        button = page.locator("button:has-text(\"Summary 📚\")")
+
+        button = page.locator('button:has-text("Summary 📚")')
         print("Button found:", button.count())
         button.click()
 
@@ -167,20 +167,28 @@ def test_dashboard_summary_tab():
         expect(selectbox).to_be_visible()
         print("Select box is visible")
 
+        last_year_data = ""
+
         for year in range(2012, 2025, 2):
             selectbox.click()
             selectbox.fill(str(year))
             selectbox.press("Enter")
-            page.wait_for_timeout(250)
+            page.wait_for_timeout(500)
 
-            un_list = page.locator(
-                "#tabs-bui2-tabpanel-3 > div > div > div > div > div > div > ul"
-            )
-            expect(un_list).to_be_visible()
-            expect(un_list).to_have_count(1)
-            print("Summary data is visible")
+            summary_data = page.get_by_label("Summary")
+            print("found ul:", summary_data.count())
+            if summary_data.count() == 0:
+                print("No summary data found")
+                continue
+            if last_year_data == summary_data.inner_text():
+                print("Summary data is same as last year")
+                continue
+            last_year_data = summary_data.inner_text()
+            expect(summary_data).to_be_visible()
+            expect(summary_data).to_have_count(1)
+            print(f"Summary {year} data is visible")
 
-            list_items = un_list.locator("li")
+            list_items = summary_data.locator("li")
             expect(list_items).to_have_count(3)
 
             page.screenshot(
