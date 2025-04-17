@@ -17,7 +17,9 @@ def test_dashboard_data_tab():
 
         # Click the "Data 📈" tab
         try:
-            page.locator("#tabs-bui2-tab-0").click()
+            button = page.locator("button:has-text(\"Data 📈\")")
+            print("Button found:", button.count())
+            button.click()
         except Exception as e:
             page.get_by_label("Data 📈").click()
         time.sleep(2)
@@ -64,7 +66,9 @@ def test_dashboard_graph_tab():
 
         # Click the "Graph 📊" tab
         try:
-            page.locator("#tabs-bui2-tab-1").click()
+            button = page.locator("button:has-text(\"Graph 📊\")")
+            print("Button found:", button.count())
+            button.click()
         except Exception as e:
             page.get_by_label("Graph 📊").click()
 
@@ -113,7 +117,9 @@ def test_dashboard_map_tab():
 
         # Click the "Map 🗺️" tab
         try:
-            page.locator("#tabs-bui2-tab-2").click()
+            button = page.locator("button:has-text(\"Map 🗺️\")")
+            print("Button found:", button.count())
+            button.click()
         except Exception as e:
             page.get_by_label("Map 🗺️").click()
         time.sleep(2)
@@ -152,12 +158,10 @@ def test_dashboard_summary_tab():
         # Click sidebar link to 'dashboard'
         page.get_by_role("link", name="dashboard").click()
         time.sleep(2)
-
-        # Click the "Summary 📚" tab
-        for i in range(3):
-            page.locator("#tabs-bui2-tab-3").click()
-            time.sleep(1)
-            print("Clicked!")
+        
+        button = page.locator("button:has-text(\"Summary 📚\")")
+        print("Button found:", button.count())
+        button.click()
 
         selectbox = page.get_by_label("Select year")
         expect(selectbox).to_be_visible()
