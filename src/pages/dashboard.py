@@ -18,7 +18,7 @@ class DashboardPage:
             if str(year) in file:
                 filepath = os.path.join(self.DATA_FOLDER, file)
                 try:
-                    df = pd.read_csv(filepath)
+                    df = pd.read_csv(filepath, low_memory=False)
                     df.drop(columns=["วันที่รายงาน"], inplace=True, errors="ignore")
                     numeric_col = df.select_dtypes(include=["number"]).columns
                     df[numeric_col] = df[numeric_col].fillna(-1)
