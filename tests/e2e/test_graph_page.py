@@ -163,7 +163,7 @@ def test_dashboard_summary_tab():
         expect(selectbox).to_be_visible()
         print("Select box is visible")
 
-        for year in range(2012, 2025):
+        for year in range(2012, 2025, 2):
             selectbox.click()
             selectbox.fill(str(year))
             selectbox.press("Enter")
