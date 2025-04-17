@@ -4,114 +4,86 @@ import pydeck as pdk
 import plotly.express as px
 import os
 
-st.set_page_config(page_title="Main Dashboard", layout="wide")
 
-# constants
-DATA_FOLDER = "data"
-CSV_FILE = [file for file in os.listdir(DATA_FOLDER) if file.endswith(".csv")]
-YEAR = list(x for x in range(2012, 2025))
-MAP_OPTION = ["2D (Simple Map)", "3D (Pydeck)"]
+class DashboardPage:
+    def __init__(self):
+        self.DATA_FOLDER = "data"
+        self.CSV_FILE = [file for file in os.listdir(self.DATA_FOLDER) if file.endswith(".csv")]
+        self.YEAR = list(range(2012, 2025))
+        self.MAP_OPTION = ["2D (Simple Map)", "3D (Pydeck)"]
+        self.df = None
 
-# page
-st.title("Thailand Car Accident Analysis")
+    def get_df(self, year: int) -> pd.DataFrame | None:
+        for file in self.CSV_FILE:
+            if str(year) in file:
+                filepath = os.path.join(self.DATA_FOLDER, file)
+                try:
+                    df = pd.read_csv(filepath, low_memory=False)
+                    df.drop(columns=["วันที่รายงาน"], inplace=True, errors="ignore")
+                    numeric_col = df.select_dtypes(include=["number"]).columns
+                    df[numeric_col] = df[numeric_col].fillna(-1)
+                    df = df.fillna("-")
+                    return df
+                except Exception as e:
+                    st.error(f"Error reading file: {e}")
+        return None
 
-selected_year = st.selectbox("Select year", YEAR)
+    def show_data_tab(self):
+        if self.df is not None:
+            st.dataframe(self.df)
 
-st.header(f"Accident data year: :red[{selected_year}]", divider="rainbow")
+    def show_graph_tab(self, year):
+        if self.df is None:
+            return
 
-data_tab, graph_tab, map_tab, summary_tab = st.tabs(
-    ["Data 📈", "Graph 📊", "Map 🗺️", "Summary 📚"]
-)
-
-
-@st.cache_data
-def get_df(year: int = 2012):
-    for file in CSV_FILE:
-        if str(year) in file:
-            filepath = os.path.join(DATA_FOLDER, file)
-            try:
-                df = pd.read_csv(filepath)
-                numeric_col = df.select_dtypes(include=["number"]).columns
-                df[numeric_col] = df[numeric_col].fillna(-1)
-                df = df.fillna("-")
-                return df
-            except Exception as e:
-                st.error(f"Error reading file: {e}")
-
-
-df = get_df(year=selected_year)
-
-with data_tab:
-    if df is not None:
-        st.dataframe(df)
-
-with graph_tab:
-    if df is not None:
         line_col, bar_col = st.columns(2)
-        
-        # line graph
+
+        # Line Chart
         with line_col:
-            st.markdown(
-                f"""
-                ### Line graph of injuries per month in 
-                year {selected_year}
-                """
-            )
-            month_df = df.copy()
-            month_df["MONTH"] = pd.DataFrame(
-                month_df["วันที่เกิดเหตุ"].str.split("/").str[1]
-            )
+            st.markdown(f"### Line graph of injuries per month in year {year}")
+            month_df = self.df.copy()
+            month_df["MONTH"] = month_df["วันที่เกิดเหตุ"].str.split("/").str[1]
             st.line_chart(
-                month_df.groupby("MONTH")["รวมจำนวนผู้บาดเจ็บ"]
-                .sum()
-                .sort_index(ascending=True)
+                month_df.groupby("MONTH")["รวมจำนวนผู้บาดเจ็บ"].sum().sort_index()
             )
-        # bar graph
+
+        # Bar Chart
         with bar_col:
             bar_graph = st.selectbox(
                 "Select Bar x-axis", ["จังหวัด", "มูลเหตุสันนิษฐาน", "บริเวณที่เกิดเหตุ/ลักษณะทาง"]
             )
             try:
-                st.markdown(
-                    f"""
-                    ### Bar graph of injuries per 
-                    #### {bar_graph}
-                    """
-                )
-                graph_df = df[df[bar_graph] != "-"]
+                st.markdown(f"### Bar graph of injuries per {bar_graph}")
+                graph_df = self.df[self.df[bar_graph] != "-"]
                 st.bar_chart(
-                    graph_df[["รวมจำนวนผู้บาดเจ็บ", bar_graph]].groupby(bar_graph).sum()
+                    graph_df.groupby(bar_graph)[["รวมจำนวนผู้บาดเจ็บ"]].sum()
                 )
             except Exception as e:
                 st.error(f"Error displaying bar graph: {e}")
 
-        # pie chart
-        weather_count = df["สภาพอากาศ"].value_counts().reset_index()
+        # Pie Chart
+        st.markdown("### Pie chart of accidents by weather condition")
+        weather_count = self.df["สภาพอากาศ"].value_counts().reset_index()
         weather_count.columns = ["Weather", "Count"]
-        
-        st.markdown(
-            """
-            ### Pie chart of accidents by weather condition
-            """
-        )
         fig = px.pie(weather_count, names="Weather", values="Count")
         st.plotly_chart(fig)
 
-with map_tab:
-    if df is not None:
-        copy_df = df.copy()
+    def show_map_tab(self):
+        if self.df is None:
+            return
+
         try:
-            copy_df = copy_df[["LATITUDE", "LONGITUDE", "รวมจำนวนผู้บาดเจ็บ"]]
+            copy_df = self.df[["LATITUDE", "LONGITUDE", "รวมจำนวนผู้บาดเจ็บ"]]
             copy_df = copy_df[
                 (copy_df["LATITUDE"] != -1) & (copy_df["LONGITUDE"] != -1)
             ]
             copy_df = copy_df.rename(columns={"LATITUDE": "lat", "LONGITUDE": "lon"})
         except Exception as e:
             st.error(f"Error displaying map: {e}")
-        view_mode = st.radio(
-            "### Select map view:", (MAP_OPTION[0], MAP_OPTION[1]), horizontal=True
-        )
-        if view_mode == MAP_OPTION[0]:
+            return
+
+        view_mode = st.radio("### Select map view:", self.MAP_OPTION, horizontal=True)
+        if view_mode == self.MAP_OPTION[0]:
             st.map(copy_df[["lat", "lon"]], zoom=6, use_container_width=True)
         else:
             ele_scale_col, pitch_col = st.columns(2)
@@ -120,7 +92,8 @@ with map_tab:
                     "Elevation scale", min_value=1, max_value=10000, value=1000
                 )
             with pitch_col:
-                pitch = st.slider("Angle", min_value=0, max_value=60, value=50, step=1)
+                pitch = st.slider("Angle", min_value=0, max_value=60, value=50)
+
             layer = [
                 pdk.Layer(
                     "ColumnLayer",
@@ -132,7 +105,7 @@ with map_tab:
                     get_fill_color=[255, 0, 0, 200],
                     pickable=True,
                     auto_highlight=True,
-                ),
+                )
             ]
 
             view_state = pdk.ViewState(
@@ -150,13 +123,40 @@ with map_tab:
                 )
             )
 
-with summary_tab:
-    if df is not None:
-        st.markdown(
-            f"""
-            ## Summary
-            - Total accidents: {len(df)}
-            - Total fatalities: {df['จำนวนผู้เสียชีวิต'].sum()}
-            - Total injuries: {df['รวมจำนวนผู้บาดเจ็บ'].sum()}
-            """
+    def show_summary_tab(self):
+        if self.df is not None:
+            st.markdown(f"""
+                ## Summary
+                - Total accidents: {len(self.df)}
+                - Total fatalities: {self.df['จำนวนผู้เสียชีวิต'].sum()}
+                - Total injuries: {self.df['รวมจำนวนผู้บาดเจ็บ'].sum()}
+            """)
+
+    def render(self):
+        st.set_page_config(page_title="Main Dashboard", layout="wide")
+        st.title("Welcome to Dashboard Page🚗")
+
+        selected_year = st.selectbox("Select year", self.YEAR)
+        st.header(f"Accident data year: :red[{selected_year}]", divider="rainbow")
+        self.df = self.get_df(selected_year)
+
+        data_tab, graph_tab, map_tab, summary_tab = st.tabs(
+            ["Data 📈", "Graph 📊", "Map 🗺️", "Summary 📚"]
         )
+
+        with data_tab:
+            self.show_data_tab()
+
+        with graph_tab:
+            self.show_graph_tab(selected_year)
+
+        with map_tab:
+            self.show_map_tab()
+
+        with summary_tab:
+            self.show_summary_tab()
+
+
+if __name__ == "__main__":
+    page = DashboardPage()
+    page.render()

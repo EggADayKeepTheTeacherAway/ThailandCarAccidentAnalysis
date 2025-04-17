@@ -1,7 +1,7 @@
 # src/api/api_app.py
 import os
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 
 DATASET_NEED = [
     "ปีที่เกิดเหตุ",
@@ -15,6 +15,12 @@ DATASET_NEED = [
     "LATITUDE",
     "LONGITUDE",
 ]
+
+
+def create_app():
+    app = FastAPI()
+    AccidentAPI(app)
+    return app
 
 
 class AccidentAPI:
@@ -63,8 +69,8 @@ class AccidentAPI:
                         df = pd.read_csv(filepath)
                         first_rc = df.head(1)
                         last_rc = df.tail(1)
+                        print(f"File name: {filename}")
                         return {
-                            "filename": filename,
                             "year": year,
                             "total_accidents": int(df.shape[0]),
                             "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
@@ -77,5 +83,29 @@ class AccidentAPI:
                             status_code=500, detail=f"Error reading file: {e}"
                         )
             return HTTPException(
-                status_code=404, detail="File not found for year {year}"
+                status_code=404, detail=f"File not found for year {year}"
             )
+
+        @self.app.get("/predict/accident")
+        async def get_accidents_year_summary(
+            lat: float = Query(...), lon: float = Query(...)
+        ):
+            prediction = "accident prediction"
+            # TODO: insert model here
+            return {
+                "lat": lat,
+                "lon": lon,
+                "prediction": prediction,
+            }
+
+        @self.app.get("/predict/injuries")
+        async def get_accidents_year_summary(
+            lat: float = Query(...), lon: float = Query(...)
+        ):
+            prediction = "injuries prediction"
+            # TODO: insert model here
+            return {
+                "lat": lat,
+                "lon": lon,
+                "prediction": prediction,
+            }

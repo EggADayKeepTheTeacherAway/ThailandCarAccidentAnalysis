@@ -1,7 +1,6 @@
 # main.py
 
 from fastapi import FastAPI
-from src.api.api_app import AccidentAPI
+from src.api.api_app import create_app
 
-app = FastAPI()
-AccidentAPI(app)
+app = create_app()

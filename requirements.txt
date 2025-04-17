@@ -1,4 +1,5 @@
 streamlit
+streamlit_js_eval
 gdown
 pandas
 numpy
@@ -7,3 +8,5 @@ watchdog
 uvicorn
 pytest-playwright
 plotly
+pytest
+httpx
