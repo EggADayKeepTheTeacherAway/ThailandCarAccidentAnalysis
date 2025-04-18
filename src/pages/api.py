@@ -1,6 +1,10 @@
 import streamlit as st
 from streamlit_js_eval import get_geolocation
 
+st.set_page_config(
+    page_title="Thailand Accident Analysis", page_icon="📍", layout="wide"
+)
+
 st.title("Welcome to API Page:car:")
 st.markdown(
     """
@@ -13,7 +17,10 @@ result = get_geolocation()
 if result and "coords" in result:
     latitude = result["coords"].get("latitude")
     longitude = result["coords"].get("longitude")
-    st.write(f"Your Location:\nLatitude: {latitude}\nLongitude: {longitude}")
+    st.success(
+        f"Your Location\n\n" f"Latitude: {latitude}\n\n" f"Longitude: {longitude}"
+    )
 else:
-    st.error("Unable to get geolocation data. Please check your browser settings or change the browser.")
-    
+    st.error(
+        "Unable to get geolocation data. Please check your browser settings or change the browser."
+    )
