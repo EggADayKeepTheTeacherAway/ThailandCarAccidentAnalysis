@@ -1,0 +1,14 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>80</x><y>150</y><w>230</w><h>210</h></coordinates><panel_attributes>DashboardPage
+--
+DATA_FOLDER: str
+CSV_FILE: str
+YEAR: list(int)
+MAP_OPTION: list(str)
+df: pd.DataFrame
+--
+get_df(year: int): pd.DataFrame
+show_data_tab(): void
+show_graph_tab(year: int): void
+show_map_tab(): void
+show_summary_tab(): void
+render(): void</panel_attributes><additional_attributes></additional_attributes></element></diagram>
