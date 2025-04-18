@@ -4,10 +4,6 @@ import pydeck as pdk
 import plotly.express as px
 import os
 
-st.set_page_config(
-    page_title="Thailand Accident Analysis", page_icon="📈", layout="wide"
-)
-
 
 class DashboardPage:
     def __init__(self):
