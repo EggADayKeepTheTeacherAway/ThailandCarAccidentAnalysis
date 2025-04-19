@@ -21,6 +21,10 @@ st.markdown(
     """
 )
 
+st.write(
+    "To use the API make sure that the API server is running in the port 8000. Then fetch the API using the following URL :grey-badge[http://127.0.0.1:8000/<API Endpoint>] or if you are hosting the API on the cloud server make sure to replace the URL with the cloud server URL."
+)
+
 with st.expander(":grey-badge[Geolocation]"):
     result = get_geolocation()
     if result and "coords" in result:
