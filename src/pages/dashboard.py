@@ -8,7 +8,9 @@ import os
 class DashboardPage:
     def __init__(self):
         self.DATA_FOLDER = "data"
-        self.CSV_FILE = [file for file in os.listdir(self.DATA_FOLDER) if file.endswith(".csv")]
+        self.CSV_FILE = [
+            file for file in os.listdir(self.DATA_FOLDER) if file.endswith(".csv")
+        ]
         self.YEAR = list(range(2012, 2025))
         self.MAP_OPTION = ["2D (Simple Map)", "3D (Pydeck)"]
         self.df = None
@@ -55,9 +57,7 @@ class DashboardPage:
             try:
                 st.markdown(f"### Bar graph of injuries per {bar_graph}")
                 graph_df = self.df[self.df[bar_graph] != "-"]
-                st.bar_chart(
-                    graph_df.groupby(bar_graph)[["รวมจำนวนผู้บาดเจ็บ"]].sum()
-                )
+                st.bar_chart(graph_df.groupby(bar_graph)[["รวมจำนวนผู้บาดเจ็บ"]].sum())
             except Exception as e:
                 st.error(f"Error displaying bar graph: {e}")
 
@@ -125,12 +125,14 @@ class DashboardPage:
 
     def show_summary_tab(self):
         if self.df is not None:
-            st.markdown(f"""
+            st.markdown(
+                f"""
                 ## Summary
                 - Total accidents: {len(self.df)}
                 - Total fatalities: {self.df['จำนวนผู้เสียชีวิต'].sum()}
                 - Total injuries: {self.df['รวมจำนวนผู้บาดเจ็บ'].sum()}
-            """)
+            """
+            )
 
     def render(self):
         st.set_page_config(page_title="Main Dashboard", layout="wide")

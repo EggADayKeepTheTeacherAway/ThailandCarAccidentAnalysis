@@ -1,8 +1,10 @@
 # src/api/api_app.py
 import os
 import pandas as pd
+import datetime
 from fastapi import FastAPI, HTTPException, Query
 
+TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 DATASET_NEED = [
     "ปีที่เกิดเหตุ",
     "วันที่เกิดเหตุ",
@@ -75,6 +77,8 @@ class AccidentAPI:
                             "total_accidents": int(df.shape[0]),
                             "total_deaths": int(df["จำนวนผู้เสียชีวิต"].sum()),
                             "total_injuries": int(df["รวมจำนวนผู้บาดเจ็บ"].sum()),
+                            "average_deaths": float(df["จำนวนผู้เสียชีวิต"].mean()),
+                            "average_injuries": float(df["รวมจำนวนผู้บาดเจ็บ"].mean()),
                             "first_record": self.format_record(first_rc),
                             "last_record": self.format_record(last_rc),
                         }
@@ -91,10 +95,12 @@ class AccidentAPI:
             lat: float = Query(...), lon: float = Query(...)
         ):
             prediction = "accident prediction"
+            time = datetime.datetime.now().strftime(TIME_FORMAT)
             # TODO: insert model here
             return {
                 "lat": lat,
                 "lon": lon,
+                "time": time,
                 "prediction": prediction,
             }
 
@@ -103,9 +109,11 @@ class AccidentAPI:
             lat: float = Query(...), lon: float = Query(...)
         ):
             prediction = "injuries prediction"
+            time = datetime.datetime.now().strftime(TIME_FORMAT)
             # TODO: insert model here
             return {
                 "lat": lat,
                 "lon": lon,
+                "time": time,
                 "prediction": prediction,
             }
