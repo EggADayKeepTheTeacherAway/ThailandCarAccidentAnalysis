@@ -17,6 +17,16 @@ Secondary data are from both Kaggle and the weather API.
 ## **API to be provided to users**
  - Website to input the location and time to predict the accident and show the historical data from the database that can be sorted by location
 
+## Initial set up
+1. Clone the repository
+    ```shell
+    git clone https://github.com/EggADayKeepTheTeacherAway/ThailandCarAccidentAnalysis.git
+    ```
+2. Change directory to the project root directory
+    ```shell
+    cd ThailandCarAccidentAnalysis
+    ```
+
 ## Install requirements and run the app.
  1. Create virtual environment
     1. Create venv
@@ -31,7 +41,7 @@ Secondary data are from both Kaggle and the weather API.
             # In PowerShell
             venv\Scripts\Activate.ps1
             ```
-       3. For MacOS and Linux
+       2. For MacOS and Linux
             ```shell
             source myvenv/bin/activate
             ```
@@ -54,6 +64,6 @@ Secondary data are from both Kaggle and the weather API.
           ```
 
 ## Run the test
-     ```shell
-     pytest .\tests\
-     ```
+```shell
+pytest .\tests\
+```
