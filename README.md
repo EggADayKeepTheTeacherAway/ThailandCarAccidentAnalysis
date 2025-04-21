@@ -67,3 +67,5 @@ Secondary data are from both Kaggle and the weather API.
 ```shell
 pytest .\tests\
 ```
+
+![egg accident](https://media.discordapp.net/attachments/811995210225156148/1363924955192102932/image.jpg?ex=6807cd99&is=68067c19&hm=daf289948c195f32797454ab0ae7aee05fb362ebbf4952fa355badd5a678c729&=&format=webp&width=1200&height=960)
