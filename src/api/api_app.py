@@ -1,8 +1,12 @@
 # src/api/api_app.py
 import os
+import sys
 import pandas as pd
 import datetime
 from fastapi import FastAPI, HTTPException, Query
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from model.prediction import get_user_prediction
 
 TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 DATASET_NEED = [
@@ -92,21 +96,20 @@ class AccidentAPI:
 
         @self.app.get("/predict/accident")
         async def get_accidents_year_summary(
-            lat: float = Query(...), lon: float = Query(...)
+                lat: float = Query(...), lon: float = Query(...)
         ):
-            prediction = "accident prediction"
+            prediction = get_user_prediction(lat, lon)
             time = datetime.datetime.now().strftime(TIME_FORMAT)
-            # TODO: insert model here
             return {
                 "lat": lat,
                 "lon": lon,
                 "time": time,
-                "prediction": prediction,
+                "prediction": float(prediction),
             }
 
         @self.app.get("/predict/injuries")
         async def get_accidents_year_summary(
-            lat: float = Query(...), lon: float = Query(...)
+                lat: float = Query(...), lon: float = Query(...)
         ):
             prediction = "injuries prediction"
             time = datetime.datetime.now().strftime(TIME_FORMAT)

@@ -10,3 +10,6 @@ pytest-playwright
 plotly
 pytest
 httpx
+tensorflow
+joblib
+requests

@@ -86,22 +86,22 @@ with st.expander(":green-badge[GET]:grey-badge[/predict/accident]"):
             f"{response.json().get('detail')[0].get('msg', 'No data found').capitalize()}"
         )
 
-with st.expander(":green-badge[GET]:grey-badge[/predict/injuries]"):
-    latitude = st.number_input(
-        "Enter latitude to predict injuries",
-        value=None,
-        placeholder="Type in a latitude",
-    )
-    longitude = st.number_input(
-        "Enter longitude to predict injuries",
-        value=None,
-        placeholder="Type in a longitude",
-    )
-    response = client.get(f"/predict/accident?lat={latitude}&lon={longitude}")
-    if response.status_code == 200:
-        data = response.json()
-        st.json(data)
-    else:
-        st.error(
-            f"{response.json().get('detail')[0].get('msg', 'No data found').capitalize()}"
-        )
+# with st.expander(":green-badge[GET]:grey-badge[/predict/injuries]"):
+#     latitude = st.number_input(
+#         "Enter latitude to predict injuries",
+#         value=None,
+#         placeholder="Type in a latitude",
+#     )
+#     longitude = st.number_input(
+#         "Enter longitude to predict injuries",
+#         value=None,
+#         placeholder="Type in a longitude",
+#     )
+#     response = client.get(f"/predict/accident?lat={latitude}&lon={longitude}")
+#     if response.status_code == 200:
+#         data = response.json()
+#         st.json(data)
+#     else:
+#         st.error(
+#             f"{response.json().get('detail')[0].get('msg', 'No data found').capitalize()}"
+#         )
